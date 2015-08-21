@@ -13,8 +13,9 @@ Pod::Spec.new do |s|
   s.license      = "MIT" 
   s.author             = { "Tobias Sundstrand" => "tobias.sundstrand@gmail.com" }
   s.social_media_url   = "http://twitter.com/laptobbe"
-  s.platform     = :ios, 6.0
-  s.source       = { :git => "https://github.com/laptobbe/TSMarkdownParser.git", :tag => s.version.to_s }
+  s.ios.deployment_target = 6.0
+  s.watchos.deployment_target = 2.0
+  s.source       = { :git => "https://github.com/radex/TSMarkdownParser.git", branch: 'master' }
   s.source_files  = "TSMarkdownParser/**/*.{h,m}"
   s.requires_arc = true
 end
