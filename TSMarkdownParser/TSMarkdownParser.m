@@ -245,35 +245,35 @@ static NSString *const TSMarkdownMonospaceRegex        = @"(`+)\\s*([\\s\\S]*?[^
     }];
 }
 
-- (void)addImageParsingWithImageFormattingBlock:(TSMarkdownParserFormattingBlock)formattingBlock alternativeTextFormattingBlock:(TSMarkdownParserFormattingBlock)alternativeFormattingBlock {
-    NSRegularExpression *headerExpression = [NSRegularExpression regularExpressionWithPattern:TSMarkdownImageRegex options:NSRegularExpressionCaseInsensitive error:nil];
-    [self addParsingRuleWithRegularExpression:headerExpression withBlock:^(NSTextCheckingResult *match, NSMutableAttributedString *attributedString) {
-        NSUInteger imagePathStart = [attributedString.string rangeOfString:@"(" options:0 range:match.range].location;
-        NSRange linkRange = NSMakeRange(imagePathStart, match.range.length+match.range.location- imagePathStart -1);
-        NSString *imagePath = [attributedString.string substringWithRange:NSMakeRange(linkRange.location+1, linkRange.length-1)];
-        UIImage *image = [UIImage imageNamed:imagePath];
-        if(image){
-            [attributedString deleteCharactersInRange:match.range];
-            NSTextAttachment *imageAttachment = [NSTextAttachment new];
-            imageAttachment.image = image;
-            imageAttachment.bounds = CGRectMake(0, -5, image.size.width, image.size.height);
-            NSAttributedString *imgStr = [NSAttributedString attributedStringWithAttachment:imageAttachment];
-            NSRange imageRange = NSMakeRange(match.range.location, 1);
-            [attributedString insertAttributedString:imgStr atIndex:match.range.location];
-            if(formattingBlock) {
-                formattingBlock(attributedString, imageRange);
-            }
-        } else {
-            NSUInteger linkTextEndLocation = [attributedString.string rangeOfString:@"]" options:0 range:match.range].location;
-            NSRange linkTextRange = NSMakeRange(match.range.location+2, linkTextEndLocation-match.range.location-2);
-            NSString *alternativeText = [attributedString.string substringWithRange:linkTextRange];
-            if(alternativeFormattingBlock) {
-                alternativeFormattingBlock(attributedString, match.range);
-            }
-            [attributedString replaceCharactersInRange:match.range withString:alternativeText];
-        }
-    }];
-}
+// - (void)addImageParsingWithImageFormattingBlock:(TSMarkdownParserFormattingBlock)formattingBlock alternativeTextFormattingBlock:(TSMarkdownParserFormattingBlock)alternativeFormattingBlock {
+//     NSRegularExpression *headerExpression = [NSRegularExpression regularExpressionWithPattern:TSMarkdownImageRegex options:NSRegularExpressionCaseInsensitive error:nil];
+//     [self addParsingRuleWithRegularExpression:headerExpression withBlock:^(NSTextCheckingResult *match, NSMutableAttributedString *attributedString) {
+//         NSUInteger imagePathStart = [attributedString.string rangeOfString:@"(" options:0 range:match.range].location;
+//         NSRange linkRange = NSMakeRange(imagePathStart, match.range.length+match.range.location- imagePathStart -1);
+//         NSString *imagePath = [attributedString.string substringWithRange:NSMakeRange(linkRange.location+1, linkRange.length-1)];
+//         UIImage *image = [UIImage imageNamed:imagePath];
+//         if(image){
+//             [attributedString deleteCharactersInRange:match.range];
+//             NSTextAttachment *imageAttachment = [NSTextAttachment new];
+//             imageAttachment.image = image;
+//             imageAttachment.bounds = CGRectMake(0, -5, image.size.width, image.size.height);
+//             NSAttributedString *imgStr = [NSAttributedString attributedStringWithAttachment:imageAttachment];
+//             NSRange imageRange = NSMakeRange(match.range.location, 1);
+//             [attributedString insertAttributedString:imgStr atIndex:match.range.location];
+//             if(formattingBlock) {
+//                 formattingBlock(attributedString, imageRange);
+//             }
+//         } else {
+//             NSUInteger linkTextEndLocation = [attributedString.string rangeOfString:@"]" options:0 range:match.range].location;
+//             NSRange linkTextRange = NSMakeRange(match.range.location+2, linkTextEndLocation-match.range.location-2);
+//             NSString *alternativeText = [attributedString.string substringWithRange:linkTextRange];
+//             if(alternativeFormattingBlock) {
+//                 alternativeFormattingBlock(attributedString, match.range);
+//             }
+//             [attributedString replaceCharactersInRange:match.range withString:alternativeText];
+//         }
+//     }];
+// }
 
 - (void)addParsingRuleWithRegularExpression:(NSRegularExpression *)regularExpression withBlock:(TSMarkdownParserMatchBlock)block {
     @synchronized (self) {
